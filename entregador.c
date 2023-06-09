@@ -360,33 +360,41 @@ void mostrar_tudo_entregador (Lista_entregadores *l) // mostra TODAS as informa�
 void copiarEntregador (entregador *A, entregador *B) // função de auxílio. copia todas as informações de um elemento para outro
 {
     int i, j;
-
     B->codigo = A->codigo;
     B->corridas = A->corridas;
     B->status = A->status;
     B->rank.media = A->rank.media;
     B->rank.quantidade = A->rank.quantidade;
     B->rank.total = A->rank.total;
+    B->quant_pedidos = A->quant_pedidos;
     strcpy (B->cpf, A->cpf);
     strcpy (B->email, A->email);
     strcpy (B->nome, A->nome);
-
-    B->historico = (pedidosE*) realloc (B->historico, A->quant_pedidos*sizeof(pedidosE));
-    for (i = 0; i < A->quant_pedidos; i++)
+    
+    //if (B->historico == NULL) B->historico = (pedidosE*) malloc (sizeof(pedidosE));
+    if (A->historico != NULL)
     {
-        B->historico[i].precoTotal = A->historico[i].precoTotal;
-        strcpy(B->historico[i].nome_rest, A->historico[i].nome_rest);
-        B->historico[i].codigo = A->historico[i].codigo;
-        B->historico[i].qtdPed = A->historico[i].qtdPed;
-
-        B->historico[i].ped = (pratosE*) realloc (B->historico[i].ped, A->historico[i].qtdPed*sizeof(pratosE));
-
-        for (j = 0; j < A->historico[i].qtdPed; j++)
+        B->historico = (pedidosE*) realloc (B->historico, A->quant_pedidos*sizeof(pedidosE));
+        for (i = 0; i < A->quant_pedidos; i++)
         {
-            B->historico[i].ped[j].preco = A->historico[i].ped[j].preco;
-            strcpy(B->historico[i].ped[j].nome, A->historico[i].ped[j].nome);
-            strcpy(B->historico[i].ped[j].descricao, A->historico[i].ped[j].descricao);
+            B->historico[i].precoTotal = A->historico[i].precoTotal;
+            strcpy(B->historico[i].nome_rest, A->historico[i].nome_rest);
+            B->historico[i].codigo = A->historico[i].codigo;
+            B->historico[i].qtdPed = A->historico[i].qtdPed;
+
+            B->historico[i].ped = (pratosE*) realloc (B->historico[i].ped, A->historico[i].qtdPed*sizeof(pratosE));
+
+            for (j = 0; j < A->historico[i].qtdPed; j++)
+            {
+                B->historico[i].ped[j].preco = A->historico[i].ped[j].preco;
+                strcpy(B->historico[i].ped[j].nome, A->historico[i].ped[j].nome);
+                strcpy(B->historico[i].ped[j].descricao, A->historico[i].ped[j].descricao);
+            }
         }
+    }
+    else
+    {
+        B->historico = NULL;
     }
 }
 
@@ -503,6 +511,26 @@ int trocaCodigo (Lista_entregadores *l, int codigo_atual, int *novo_codigo)
         codigo_atual = sortearCodigoEntregador(l);
         *novo_codigo = codigo_atual;
         aux->valor.codigo = codigo_atual;
+        return 0;
+    }
+    return 1;
+}
+
+int trocaEmail (Lista_entregadores *l, int codigo, char *novo_email)
+{
+    if (l == NULL) return NULL_LIST;
+    if (listaVaziaEntregador(l) == 0) return EMPTY_LIST;
+
+    No_entregador *aux = l->inicio;
+
+    while ((aux->prox != NULL) && (aux->valor.codigo != codigo))
+    {
+        aux = aux->prox;
+    }
+
+    if (aux->valor.codigo == codigo)
+    {
+        strcpy(aux->valor.email, novo_email);
         return 0;
     }
     return 1;

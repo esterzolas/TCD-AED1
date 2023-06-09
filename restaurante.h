@@ -30,7 +30,8 @@ typedef struct rest
     char categoria[30];
     int codigo;
     int status; // se quer participar do programa de fidelidade
-    pratosR *menu;
+    pratosR *cardapio;
+    int qtdCardapio;
     pedidosR *historico;
     Fila_PedidosPendentes *pedidosPendentes;
 } restaurante;
@@ -48,39 +49,47 @@ typedef struct listaR // lista
 } Lista_restaurantes;
 
 // criar
-Lista_restaurantes *criar_listaRestaurantes(); // ok
-//restaurante *criar_restaurante(char *nome, char *login, int senha, int codigo, char *categoria, pratosR *menu, pedidos *historico, int status, Fila_PedidosPendentes *f);
-int criar_listaCategoria(Lista_restaurantes *l1, Lista_restaurantes *l2, char *categoria); // ok
+Lista_restaurantes *criar_listaRestaurantes(); 
+int criar_listaCategoria(Lista_restaurantes *l1, Lista_restaurantes *l2, char *categoria);
 
 // auxiliares
-int listaVaziaRest(Lista_restaurantes *l); // ok
+int listaVaziaRest(Lista_restaurantes *l);
 int listaCheiaRest(Lista_restaurantes *l);
 void limparRest(Lista_restaurantes *l);
 int tamanhoRest(Lista_restaurantes *l);
 
 // insercao
-int inserirInicioRest(Lista_restaurantes *l, restaurante item); // ok
-int inserirFimRest(Lista_restaurantes *l, restaurante item);    // ok
-int inserirPosicao(Lista_restaurantes *l, restaurante item, int pos);
+int inserirInicioRest(Lista_restaurantes *l, restaurante item);
+int inserirFimRest(Lista_restaurantes *l, restaurante item);   
+int inserirPosicaoRest(Lista_restaurantes *l, restaurante item, int pos);
+int inserirPratoRest(Lista_restaurantes *l, pratosR novoPrato, restaurante *item);
 
 // remocao
 int removerInicioRest(Lista_restaurantes *l);
 int removerFimRest(Lista_restaurantes *l);
 int removerPosRest(Lista_restaurantes *l, int pos);
-int removerRest(Lista_restaurantes *l, int codigo);
+int removerRestCodigo(Lista_restaurantes *l, int codigo);
+int removerPratoRest(Lista_restaurantes *l, char *nomePrato, restaurante *item);
 
-void copiarRest(restaurante *A, restaurante *B);
-int buscarCodigoRest(Lista_restaurantes *l, int codigo, restaurante *item);
-int buscarRest(Lista_restaurantes *l, restaurante *item);
-void mostrarInfoRest(Lista_restaurantes *l);
+// busca
+int buscarRestCodigo(Lista_restaurantes *l, int codigo, restaurante *item);
+int buscarRestEmailCodigo(Lista_restaurantes *l, char *email, int codigo, restaurante *item);
+int buscarRestNome(Lista_restaurantes *l, char *nome);
+//int buscarRestPos(Lista_restaurantes *l, int pos, restaurante *item);
 
-    // mostrar opcao do menuCliente
-    // int buscarNome(Lista_restaurantes *l, restaurante *nome);
-    // void mostrarCategoria(Lista_restaurantes *l);
-    // void mostrarRestaurantes(Lista_restaurantes *l); // fer
 
-    // mostrar opcao do menuFuncionario
-    // void mostrarHistoricoPedidos();
-    // void mostrarPedidosPendentes(); // alice
-    // int atualizarMenu();
-    // int login();
+// visualização usuário
+// void mostrarRestaurantes(Lista_restaurantes *l); 
+void mostrarInfoRest(Lista_restaurantes *l); 
+// void mostrarHistoricoPedidos(Lista_restaurantes *l, char *nome);
+void mostrarCardapio(Lista_restaurantes *l, restaurante *item);
+
+// visualização ADM
+void mostrarListaRest(Lista_restaurantes *l); 
+
+// outros
+int loginRestaurante(Lista_restaurantes *l, char *email, char *senha, restaurante *item);
+int alterarSenhaRest(Lista_restaurantes *l, int codigo, char *novaSenha, char *confirmNovaSenha);
+// int alterarEmailRest(Lista_restaurantes *l, int codigo, char *novoEmail, char *confirmNovoEmail);
+int sortearCodigoRest(Lista_restaurantes *l);
+void copiarRestaurante(restaurante *A, restaurante *B);
